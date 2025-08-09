@@ -137,40 +137,166 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    /* Mobile Navigation Styles */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    /* Responsive Typography */
+    @media (max-width: 640px) {
+      .hero-content h1 {
+        font-size: 2.5rem !important;
+        line-height: 1.2 !important;
+      }
+      
+      .hero-content p {
+        font-size: 1.125rem !important;
+      }
+      
+      .hero-content {
+        padding: 1.5rem !important;
+        margin: 1rem !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 3rem !important;
+      }
+      
+      .search-container:focus-within {
+        transform: none;
+      }
+    }
+
+    /* Responsive Grid Adjustments */
+    @media (max-width: 640px) {
+      .grid-responsive {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+      }
+    }
+
+    /* Touch-friendly buttons */
+    @media (max-width: 768px) {
+      .btn {
+        min-height: 48px;
+        padding: 0.75rem 1.5rem !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 scrollbar-hide">
 
 <!-- Navbar -->
-<header class="sticky top-0 flex items-center justify-between px-6 py-4 bg-black bg-opacity-95 shadow-lg z-50 backdrop-blur-sm">
-  <!-- Logo -->
-  <div class="flex-shrink-0">
-    <a href="home_page.html" aria-label="Go to homepage" class="transition transform hover:scale-105">
-      <img src="logo.png" alt="AI in Stem Logo" class="h-20 w-auto object-contain" />
-    </a>
+<header class="sticky top-0 bg-black bg-opacity-95 shadow-lg z-50 backdrop-blur-sm">
+  <div class="flex items-center justify-between px-4 sm:px-6 py-4">
+    <!-- Logo -->
+    <div class="flex-shrink-0">
+      <a href="home_page.html" aria-label="Go to homepage" class="transition transform hover:scale-105">
+        <img src="logo.png" alt="AI in Stem Logo" class="h-12 sm:h-16 md:h-20 w-auto object-contain" />
+      </a>
+    </div>
+
+    <!-- Desktop Search bar -->
+    <div id="searchContainer" class="relative w-full max-w-md mx-4 sm:mx-10 search-container hidden md:block">
+      <div class="flex items-center bg-gray-800 bg-opacity-50 rounded-full shadow-inner px-4 py-2 border border-gray-700">
+        <svg class="w-5 h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 16.65z"></path>
+        </svg>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search..."
+          class="w-full bg-transparent text-white placeholder-gray-400 focus:outline-none"
+        />
+      </div>
+      <div id="autocomplete" class="absolute z-50 w-full bg-gray-800 border border-gray-700 rounded-lg mt-1 hidden shadow-lg"></div>
+    </div>
+
+    <!-- Desktop Nav links -->
+    <nav class="hidden lg:flex space-x-4 xl:space-x-8 text-white text-sm lg:text-base xl:text-lg font-medium">
+      <a href="about.html" class="nav-link hover:text-blue-400 transition-colors">About</a>
+      <a href="team.html" class="nav-link hover:text-blue-400 transition-colors">Team</a>
+      <a href="#partners" class="nav-link hover:text-blue-400 transition-colors">Partners</a>
+      <a href="#join" class="nav-link hover:text-blue-400 transition-colors">Join Us</a>
+    </nav>
+
+    <!-- Mobile menu button -->
+    <button id="mobileMenuBtn" class="lg:hidden text-white p-2 rounded-md hover:bg-gray-800 transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
   </div>
 
-  <!-- Nav links -->
-  <nav class="flex space-x-8 text-white text-lg font-medium">
-    <a href="about.html" class="nav-link hover:text-blue-400 transition-colors">About</a>
-    <a href="team.html" class="nav-link hover:text-blue-400 transition-colors">Team</a>
-     <a href="#partners" class="nav-link hover:text-blue-400 transition-colors">Partners</a>
-    <a href="#join" class="nav-link hover:text-blue-400 transition-colors">Join Us</a>
-  </nav>
+  <!-- Mobile Search bar -->
+  <div class="md:hidden px-4 pb-4">
+    <div class="flex items-center bg-gray-800 bg-opacity-50 rounded-full shadow-inner px-4 py-2 border border-gray-700">
+      <svg class="w-5 h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" stroke-width="2"
+           viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 16.65z"></path>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search..."
+        class="w-full bg-transparent text-white placeholder-gray-400 focus:outline-none"
+      />
+    </div>
+  </div>
+
+  <!-- Mobile menu overlay -->
+  <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-black bg-opacity-95 backdrop-blur-sm z-50 lg:hidden">
+    <div class="flex flex-col h-full">
+      <div class="flex justify-end p-4">
+        <button id="closeMobileMenu" class="text-white p-2 rounded-md hover:bg-gray-800 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <nav class="flex flex-col space-y-6 px-6 py-8 text-white text-lg font-medium">
+        <a href="about.html" class="nav-link hover:text-blue-400 transition-colors">About</a>
+        <a href="team.html" class="nav-link hover:text-blue-400 transition-colors">Team</a>
+        <a href="#partners" class="nav-link hover:text-blue-400 transition-colors">Partners</a>
+        <a href="#join" class="nav-link hover:text-blue-400 transition-colors">Join Us</a>
+      </nav>
+    </div>
+  </div>
 </header>
 
 <!-- Hero -->
-<section class="hero-section relative min-h-screen flex items-center justify-center py-24 px-6 text-white">
+<section class="hero-section relative min-h-screen flex items-center justify-center py-12 sm:py-24 px-4 sm:px-6 text-white">
   <!-- Logo Background -->
   <div class="hero-background"></div>
   
   <!-- Content -->
   <div class="hero-content max-w-4xl mx-auto animate__animated animate__fadeIn">
-    <h1 class="text-6xl font-extrabold mb-6 leading-tight tracking-tight">Building the Future of AI, <span class="gradient-text">One Teen at a Time</span></h1>
-    <p class="text-2xl opacity-90 mb-10">AI in Stem is a student-led movement where innovation, inclusivity, and real-world impact come together.</p>
-    <div class="flex flex-wrap justify-center gap-6">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSejT_77dhKX7nwKLf8f384O9DM5MLejP-6AbXSv_oh5gmOE8w/viewform" target="_blank" class="btn bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-full shadow-lg transform transition hover:scale-105">Join the Team</a>
-      <a href="#donate" class="btn bg-transparent border-2 border-white hover:border-blue-400 text-white px-8 py-4 font-bold rounded-full shadow-lg transform transition hover:scale-105 hover:text-blue-400">Make a Donation</a>
+    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight tracking-tight">
+      Building the Future of AI, <span class="gradient-text">One Teen at a Time</span>
+    </h1>
+    <p class="text-lg sm:text-xl md:text-2xl opacity-90 mb-6 sm:mb-10">
+      AI in Stem is a student-led movement where innovation, inclusivity, and real-world impact come together.
+    </p>
+    <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSejT_77dhKX7nwKLf8f384O9DM5MLejP-6AbXSv_oh5gmOE8w/viewform" 
+         target="_blank" 
+         class="btn bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 font-bold rounded-full shadow-lg transform transition hover:scale-105 text-center">
+        Join the Team
+      </a>
+      <a href="#donate" 
+         class="btn bg-transparent border-2 border-white hover:border-blue-400 text-white px-6 sm:px-8 py-3 sm:py-4 font-bold rounded-full shadow-lg transform transition hover:scale-105 hover:text-blue-400 text-center">
+        Make a Donation
+      </a>
     </div>
   </div>
 </section>
@@ -183,34 +309,36 @@
 </div>
 
 <!-- Meet the Founders -->
-<section id="team" class="py-24 bg-gray-50">
-  <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-5xl font-bold mb-4 text-center" data-aos="fade-up">Meet the <span class="gradient-text">Team</span></h2>
-    <div class="w-24 h-1 bg-blue-600 mx-auto mb-12 rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
-    <p class="max-w-3xl mx-auto mb-16 text-xl leading-relaxed text-gray-700 text-center" data-aos="fade-up" data-aos-delay="200">
+<section id="team" class="py-12 sm:py-24 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-center" data-aos="fade-up">
+      Meet the <span class="gradient-text">Team</span>
+    </h2>
+    <div class="w-24 h-1 bg-blue-600 mx-auto mb-8 sm:mb-12 rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+    <p class="max-w-3xl mx-auto mb-12 sm:mb-16 text-lg sm:text-xl leading-relaxed text-gray-700 text-center" data-aos="fade-up" data-aos-delay="200">
       AI in Stem was founded by Aarav Rao and Kevin Cui, two passionate innovators committed to pushing the boundaries of AI technology and building a vibrant community.
     </p>
-    <div class="flex flex-col md:flex-row justify-center gap-12">
-      <a href="aarav.html" class="block w-full md:w-1/3" data-aos="fade-right" data-aos-delay="300">
-        <div class="card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:scale-105 text-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-8 sm:gap-12 max-w-4xl mx-auto">
+      <a href="aarav.html" class="block w-full max-w-sm" data-aos="fade-right" data-aos-delay="300">
+        <div class="card bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:scale-105 text-center">
           <div class="relative mb-6">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 transform scale-110 animate-pulse"></div>
-            <img src="aarav-profile.png" alt="Aarav Rao" class="w-32 h-32 rounded-full mx-auto object-cover shadow-md relative z-10">
+            <img src="aarav-profile.png" alt="Aarav Rao" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto object-cover shadow-md relative z-10">
           </div>
-          <h3 class="text-2xl font-semibold">Aarav Rao</h3>
+          <h3 class="text-xl sm:text-2xl font-semibold">Aarav Rao</h3>
           <p class="text-blue-600 mb-4">Co-Founder</p>
-          <p class="text-gray-600">Visionary leader and Technical genius ensuring excellence in all our AI development projects.</p>
+          <p class="text-gray-600 text-sm sm:text-base">Visionary leader and Technical genius ensuring excellence in all our AI development projects.</p>
         </div>
       </a>
-      <a href="kevin.html" class="block w-full md:w-1/3" data-aos="fade-left" data-aos-delay="400">
-        <div class="card bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:scale-105 text-center">
+      <a href="kevin.html" class="block w-full max-w-sm" data-aos="fade-left" data-aos-delay="400">
+        <div class="card bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:scale-105 text-center">
           <div class="relative mb-6">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 transform scale-110 animate-pulse"></div>
-            <img src="kevin-profile.png" alt="Kevin Cui" class="w-32 h-32 rounded-full mx-auto object-cover shadow-md relative z-10">
+            <img src="kevin-profile.png" alt="Kevin Cui" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto object-cover shadow-md relative z-10">
           </div>
-          <h3 class="text-2xl font-semibold">Kevin Cui</h3>
+          <h3 class="text-xl sm:text-2xl font-semibold">Kevin Cui</h3>
           <p class="text-blue-600 mb-4">Co-Founder</p>
-          <p class="text-gray-600">Champion for accessible AI, inspiring youth through hands-on learning and real-world impact.</p>
+          <p class="text-gray-600 text-sm sm:text-base">Champion for accessible AI, inspiring youth through hands-on learning and real-world impact.</p>
         </div>
       </a>
     </div>
@@ -218,24 +346,24 @@
 </section>
 
 <!-- Where We Are Section -->
-<section id="location" class="relative py-24 bg-white">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="flex flex-col lg:flex-row items-center gap-12">
+<section id="location" class="relative py-12 sm:py-24 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col lg:flex-row items-center gap-8 sm:gap-12">
       <div class="w-full lg:w-1/2" data-aos="fade-right">
-        <h2 class="text-4xl font-bold mb-6 gradient-text">Where We're Based</h2>
-        <p class="mb-8 text-gray-700 text-lg leading-relaxed">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-6 gradient-text">Where We're Based</h2>
+        <p class="mb-6 sm:mb-8 text-gray-700 text-base sm:text-lg leading-relaxed">
           We're proudly rooted in Plano, Texas, a vibrant city full of creativity and tech energy. Whether you're nearby or across the globe, this is where our journey begins.
         </p>
         <div class="flex items-center mb-6">
-          <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div>
-            <h3 class="text-lg font-semibold">Plano, Texas</h3>
-            <p class="text-gray-600">Innovation Hub of North Texas</p>
+            <h3 class="text-base sm:text-lg font-semibold">Plano, Texas</h3>
+            <p class="text-gray-600 text-sm sm:text-base">Innovation Hub of North Texas</p>
           </div>
         </div>
       </div>
@@ -244,7 +372,8 @@
           <iframe 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3346.915136624399!2d-96.75009568482569!3d33.0198430809401!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864c2b68a88c7af1%3A0x1d5c06c99659fdb9!2sPlano%2C%20TX!5e0!3m2!1sen!2sus!4v1701580530142!5m2!1sen!2sus" 
             width="100%" 
-            height="400" 
+            height="300"
+            class="sm:h-96"
             style="border:0;" 
             allowfullscreen="" 
             loading="lazy" 
@@ -258,56 +387,58 @@
 </section>
 
 <!-- What We're Building -->
-<section id="building" class="relative py-24 bg-gradient-to-br from-gray-900 to-blue-900 text-white">
+<section id="building" class="relative py-12 sm:py-24 bg-gradient-to-br from-gray-900 to-blue-900 text-white">
   <div class="absolute top-0 left-0 w-full overflow-hidden">
-    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-24">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-16 sm:h-24">
       <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-gray-50"></path>
     </svg>
   </div>
 
-  <div class="max-w-6xl mx-auto text-center px-6 relative z-10">
-    <h2 class="text-5xl font-bold mb-4" data-aos="fade-up">What We're <span class="text-blue-400">Building</span></h2>
-    <div class="w-24 h-1 bg-blue-400 mx-auto mb-12 rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
-    <p class="max-w-3xl mx-auto mb-16 text-xl leading-relaxed text-gray-300" data-aos="fade-up" data-aos-delay="200">
+  <div class="max-w-6xl mx-auto text-center px-4 sm:px-6 relative z-10">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4" data-aos="fade-up">
+      What We're <span class="text-blue-400">Building</span>
+    </h2>
+    <div class="w-24 h-1 bg-blue-400 mx-auto mb-8 sm:mb-12 rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+    <p class="max-w-3xl mx-auto mb-12 sm:mb-16 text-lg sm:text-xl leading-relaxed text-gray-300" data-aos="fade-up" data-aos-delay="200">
       Our initiatives are designed to make AI accessible, engaging, and impactful for students everywhere.
     </p>
     
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
       <!-- AI Learning Hub -->
-      <div class="card bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg p-8 rounded-xl border border-gray-700 hover:border-blue-500" data-aos="fade-up" data-aos-delay="300">
-        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="card bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg p-6 sm:p-8 rounded-xl border border-gray-700 hover:border-blue-500" data-aos="fade-up" data-aos-delay="300">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
           </svg>
         </div>
-        <h3 class="text-2xl font-semibold text-blue-400 mb-3">AI Learning Hub</h3>
-        <p class="text-gray-300 text-base leading-relaxed">
+        <h3 class="text-xl sm:text-2xl font-semibold text-blue-400 mb-3">AI Learning Hub</h3>
+        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
           No boring lectures here. We're creating a fun, easy-to-follow place where you can learn AI and machine learning step-by-step, from beginner to advanced. Everything we build is made by teens who know what works.
         </p>
       </div>
 
       <!-- Youth-Driven Projects -->
-      <div class="card bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg p-8 rounded-xl border border-gray-700 hover:border-blue-500" data-aos="fade-up" data-aos-delay="400">
-        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="card bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg p-6 sm:p-8 rounded-xl border border-gray-700 hover:border-blue-500" data-aos="fade-up" data-aos-delay="400">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
           </svg>
         </div>
-        <h3 class="text-2xl font-semibold text-blue-400 mb-3">Youth Projects</h3>
-        <p class="text-gray-300 text-base leading-relaxed">
+        <h3 class="text-xl sm:text-2xl font-semibold text-blue-400 mb-3">Youth Projects</h3>
+        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
           Our projects are made by teens, for teens, from creating cool AI art to building smart, fair machine learning models. We're not afraid to try new things and challenge what people think about AI.
         </p>
       </div>
 
       <!-- Community Launchpad -->
-      <div class="card bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg p-8 rounded-xl border border-gray-700 hover:border-blue-500" data-aos="fade-up" data-aos-delay="500">
-        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="card bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg p-6 sm:p-8 rounded-xl border border-gray-700 hover:border-blue-500 md:col-span-2 lg:col-span-1" data-aos="fade-up" data-aos-delay="500">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
         </div>
-        <h3 class="text-2xl font-semibold text-blue-400 mb-3">Community Launchpad</h3>
-        <p class="text-gray-300 text-base leading-relaxed">
+        <h3 class="text-xl sm:text-2xl font-semibold text-blue-400 mb-3">Community Launchpad</h3>
+        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
           We're creating a space where teens from everywhere can team up, whether it's through school clubs, online hangouts, or connecting with young innovators worldwide. Innovation doesn't stop when the bell rings.
         </p>
       </div>
@@ -315,114 +446,124 @@
   </div>
   
   <div class="absolute bottom-0 left-0 w-full overflow-hidden transform rotate-180">
-    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-24">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-16 sm:h-24">
       <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-white"></path>
     </svg>
   </div>
 </section>
 
-<!-- Call to Action -->
-<section id="join" class="relative py-24 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-  <div class="absolute inset-0 bg-black opacity-20"></div>
-  <div class="max-w-4xl mx-auto text-center px-6 relative z-10" data-aos="fade-up">
-    <h3 class="text-5xl font-extrabold mb-6">Join the Youth AI Revolution</h3>
-    <p class="mb-10 text-xl opacity-90 max-w-2xl mx-auto">Whether you want to lead, build, or mentor, there's a place for you at AI in Stem. Together, we can shape the future of technology.</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSejT_77dhKX7nwKLf8f384O9DM5MLejP-6AbXSv_oh5gmOE8w/viewform" target="_blank" class="btn inline-block bg-white text-blue-600 font-bold px-10 py-4 rounded-full hover:bg-gray-100 transition shadow-xl transform hover:scale-105">
-      Get Involved
-    </a>
+<!-- Partners Section -->
+<section id="partners" class="py-12 sm:py-24 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4" data-aos="fade-up">
+      Our <span class="gradient-text">Partners</span>
+    </h2>
+    <div class="w-24 h-1 bg-blue-600 mx-auto mb-8 sm:mb-12 rounded-full" data-aos="fade-up" data-aos-delay="100"></div>
+    <p class="max-w-3xl mx-auto mb-12 sm:mb-16 text-lg sm:text-xl leading-relaxed text-gray-700" data-aos="fade-up" data-aos-delay="200">
+      We collaborate with leading organizations to amplify our impact and reach more students worldwide.
+    </p>
+    <div class="text-gray-600 text-base sm:text-lg" data-aos="fade-up" data-aos-delay="300">
+      Partnership opportunities available - <a href="#join" class="text-blue-600 hover:text-blue-800 underline">Contact us</a>
+    </div>
+  </div>
+</section>
+
+<!-- Join Us Section -->
+<section id="join" class="py-12 sm:py-24 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6" data-aos="fade-up">
+      Ready to Shape the Future?
+    </h2>
+    <p class="text-lg sm:text-xl mb-8 sm:mb-12 opacity-90" data-aos="fade-up" data-aos-delay="100">
+      Join our community of young innovators and be part of the AI revolution.
+    </p>
+    <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6" data-aos="fade-up" data-aos-delay="200">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSejT_77dhKX7nwKLf8f384O9DM5MLejP-6AbXSv_oh5gmOE8w/viewform" 
+         target="_blank" 
+         class="btn bg-white text-blue-600 hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 font-bold rounded-full shadow-lg transform transition hover:scale-105 text-center">
+        Join Our Team
+      </a>
+      <a href="#donate" 
+         class="btn bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 font-bold rounded-full shadow-lg transform transition hover:scale-105 text-center">
+        Support Our Mission
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- Footer -->
-<footer class="bg-black text-white py-16">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-10">
-      <img src="logo.png" alt="AI in Stem Logo" class="h-16 mb-6 md:mb-0" />
-      <div class="flex space-x-6">
-        <a href="#" class="text-gray-400 hover:text-white transition">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
-          </svg>
-        </a>
-        <a href="#" class="text-gray-400 hover:text-white transition">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
-          </svg>
-        </a>
-        <a href="#" class="text-gray-400 hover:text-white transition">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path>
-          </svg>
-        </a>
-        <a href="#" class="text-gray-400 hover:text-white transition">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
-          </svg>
-        </a>
+<footer class="bg-gray-900 text-white py-8 sm:py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <img src="logo.png" alt="AI in Stem Logo" class="h-12 sm:h-16 w-auto mb-4">
+        <p class="text-gray-400 text-sm sm:text-base">
+          Empowering the next generation of AI innovators through education, collaboration, and real-world impact.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-lg sm:text-xl font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-gray-400 text-sm sm:text-base">
+          <li><a href="about.html" class="hover:text-white transition-colors">About Us</a></li>
+          <li><a href="team.html" class="hover:text-white transition-colors">Our Team</a></li>
+          <li><a href="#partners" class="hover:text-white transition-colors">Partners</a></li>
+          <li><a href="#join" class="hover:text-white transition-colors">Join Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg sm:text-xl font-semibold mb-4">Connect</h3>
+        <p class="text-gray-400 text-sm sm:text-base mb-4">
+          Follow our journey and stay updated with the latest in AI education.
+        </p>
+        <div class="flex space-x-4">
+          <!-- Social media icons can be added here -->
+        </div>
       </div>
     </div>
-    <div class="border-t border-gray-800 pt-8 text-center">
-        <p class="text-lg">&copy; 2025 AI in Stem. All rights reserved.</p>
+    <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm sm:text-base">
+      <p>&copy; 2024 AI in Stem. All rights reserved.</p>
     </div>
   </div>
 </footer>
 
-<!-- Autocomplete Script -->
+<!-- JavaScript for mobile menu -->
 <script>
-  const suggestions = [
-    "AI Projects",
-    "Start a Chapter",
-    "Volunteer",
-    "Leadership Team",
-    "Machine Learning Club",
-    "What We're Building",
-    "Donate",
-    "Mentorship Program",
-    "NextGenAI Blog"
-  ];
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMobileMenu = document.getElementById('closeMobileMenu');
 
-  const input = document.getElementById("searchInput");
-  const dropdown = document.getElementById("autocomplete");
-
-  input.addEventListener("input", () => {
-    const value = input.value.toLowerCase();
-    dropdown.innerHTML = "";
-    if (value === "") {
-      dropdown.classList.add("hidden");
-      return;
-    }
-
-    const filteredSuggestions = suggestions.filter(suggestion =>
-      suggestion.toLowerCase().includes(value)
-    );
-
-    filteredSuggestions.forEach(suggestion => {
-      const div = document.createElement("div");
-      div.textContent = suggestion;
-      div.classList.add("px-4", "py-2", "cursor-pointer", "hover:bg-gray-700", "text-gray-200");
-
-      div.addEventListener("click", () => {
-        input.value = suggestion;
-        dropdown.classList.add("hidden");
-      });
-
-      dropdown.appendChild(div);
+    mobileMenuBtn.addEventListener('click', function() {
+      mobileMenu.classList.add('open');
     });
 
-    dropdown.classList.remove("hidden");
-  });
+    closeMobileMenu.addEventListener('click', function() {
+      mobileMenu.classList.remove('open');
+    });
 
-  document.addEventListener("click", (e) => {
-    if (!document.getElementById("searchContainer").contains(e.target)) {
-      dropdown.classList.add("hidden");
-    }
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+        mobileMenu.classList.remove('open');
+      }
+    });
+
+    // Close menu when clicking on a link
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        mobileMenu.classList.remove('open');
+      });
+    });
   });
 </script>
 
+<!-- AOS Animation Script -->
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
   AOS.init({
     duration: 800,
+    easing: 'ease-in-out',
     once: true,
     offset: 100
   });
@@ -430,3 +571,4 @@
 
 </body>
 </html>
+
